@@ -38,6 +38,10 @@
 
     ];
 
+
+    $parking = $_GET['parking'];
+    $rate = $_GET['rate']
+
 ?>
 
 <!DOCTYPE html>
@@ -52,31 +56,61 @@
 </head>
 <body>
 
+<form method="Get" class="container-lg">
+    <label for="parking">Parking:</label>
+    <select name="parking" id="parking">
+        <option value="">Need it?</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+    </select>
+    <label for="rate"></label>
+    <input type="number" id="rate" name="rate">
+    <button type="submit">Invia</button>
+    <button type="reset">Reset</button>
+</form>
+
+
 <table class="table table-primary table-striped table-hover container-lg">
     <thead>
         <tr>
             <?php
+               if ($rate <= 5 && $rate > 0) {
                 foreach($hotels[0] as $key => $hotel) {
                     echo "<th>".str_replace("_", " ", ucfirst($key))."</th>";
                 };
+            } else {
+                echo "<h1>SCEGLI UN VALORE TRA 0 E 5!</h1>";
+            };
             ?>
         </tr>
     </thead>
     <tbody>
     <?php
-foreach ($hotels as $key => $hotel) {
-    echo "<tr>";
-    if ($hotel['parking']) {
-        $hotel['parking'] = 'yes';
-    } else {
-        $hotel['parking'] = 'no';
-    };
-    foreach($hotel as $value) {
-        echo "<td>".$value."</td>";
-       
-    };
-    echo "</tr>";
-};
+ 
+        foreach ($hotels as $key => $hotel) {
+            echo "<tr>";
+            if ($hotel['parking']) {
+                $hotel['parking'] = 'yes';
+
+            } else {
+                $hotel['parking'] = 'no';
+            };
+
+            if ($parking == 'no' && $hotel['parking'] == 'no' && $hotel['vote'] >= $rate && $rate > 0) {
+                foreach($hotel as $value) {
+                    echo "<td>".$value."</td>";
+                }; 
+            } else if ($parking == 'yes' && $hotel['parking'] == 'yes' && $hotel['vote'] >= $rate && $rate > 0) {
+                foreach($hotel as $value) {
+                    echo "<td>".$value."</td>";
+                }; 
+            } else if (empty($parking) && $hotel['vote'] >= $rate && $rate > 0) {
+                foreach($hotel as $value) {
+                    echo "<td>".$value."</td>";
+                }; 
+            };
+            echo "</tr>";
+        };
     ?>
     </tbody>
 </table>
